@@ -1,6 +1,6 @@
 {
-  "id": "demo-device",
-  "host": "127.0.0.1",
-  "alias": "Demo Device",
-  "poll_interval_seconds": 5
+  "id": "living-room-bthome",
+  "host": "AA:BB:CC:DD:EE:FF",
+  "alias": "Living room sensor",
+  "poll_interval_seconds": 60
 }

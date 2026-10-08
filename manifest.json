@@ -3,7 +3,7 @@
   "manifest_version": "1.0",
   "id": "piphi-network-passive-ble-monitor",
   "name": "Passive BLE monitor",
-  "version": "0.1.0",
+  "version": "0.2.3",
   "description": "Decode supported passive BLE advertisements into sensor observations.",
   "metadata": {
     "generator": "piphi-network-create",
@@ -17,7 +17,7 @@
     "website": "https://piphi.io"
   },
   "license": "Apache-2.0",
-  "image": "docker.io/piphinetwork/piphi-network-passive-ble-monitor:0.1.0",
+  "image": "docker.io/piphinetwork/piphi-network-passive-ble-monitor:0.2.0",
   "platforms": [
     "linux"
   ],
@@ -25,7 +25,7 @@
     "linux": {
       "type": "container",
       "container": {
-        "image": "docker.io/piphinetwork/piphi-network-passive-ble-monitor:0.1.0",
+        "image": "docker.io/piphinetwork/piphi-network-passive-ble-monitor:0.2.0",
         "ports": [
           {
             "container": 4204,
@@ -96,6 +96,22 @@
       "kind": "sensor",
       "unit": "bool"
     },
+    "temperature_c": {
+      "kind": "sensor",
+      "unit": "°C"
+    },
+    "humidity_percent": {
+      "kind": "sensor",
+      "unit": "%"
+    },
+    "battery_percent": {
+      "kind": "sensor",
+      "unit": "%"
+    },
+    "rssi_dbm": {
+      "kind": "sensor",
+      "unit": "dBm"
+    },
     "refresh": {
       "kind": "action"
     }
@@ -114,6 +130,10 @@
       "entity_type": "sensor",
       "capabilities": [
         "connected",
+        "temperature_c",
+        "humidity_percent",
+        "battery_percent",
+        "rssi_dbm",
         "refresh"
       ],
       "available_commands": [
@@ -133,6 +153,15 @@
       }
     }
   ],
+  "ui": {
+    "experience_packages": [
+      {
+        "registry_id": "io.piphi.passive-ble-monitor-status",
+        "version_range": ">=0.1,<1",
+        "auto_install": true
+      }
+    ]
+  },
   "marketplace": {
     "metadata_version": 2,
     "display_name": "Passive BLE monitor",

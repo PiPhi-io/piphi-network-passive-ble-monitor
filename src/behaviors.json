@@ -125,6 +125,10 @@
       "entityType": "sensor",
       "capabilities": [
         "connected",
+        "temperature_c",
+        "humidity_percent",
+        "battery_percent",
+        "rssi_dbm",
         "refresh"
       ],
       "targeting": {
