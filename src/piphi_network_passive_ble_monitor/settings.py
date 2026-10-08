@@ -4,7 +4,7 @@ import os
 
 INTEGRATION_ID = "piphi-network-passive-ble-monitor"
 INTEGRATION_NAME = "Piphi Network Passive Ble Monitor"
-INTEGRATION_VERSION = "0.1.0"
+INTEGRATION_VERSION = "0.2.3"
 PROJECT_KIND = "integration"
 PROJECT_PRESET = "sensor-device"
 PROJECT_DOMAIN = "sensor"

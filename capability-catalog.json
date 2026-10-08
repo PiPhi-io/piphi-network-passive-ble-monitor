@@ -6,7 +6,7 @@
   "sources": {
     "ble_monitor": "https://github.com/custom-components/ble_monitor",
     "supported_devices": "https://custom-components.github.io/ble_monitor/devices",
-    "bthome": "https://custom-components.github.io/ble_monitor/bthome",
+    "bthome": "https://bthome.io/format/",
     "ble_gateway": "PiPhi managed BLE gateway sidecar contract",
     "core_vocabulary": "PiPhi Network Core and maintained PiPhi integrations"
   },
@@ -16,19 +16,30 @@
       "status": "implemented",
       "scope": ["all-configurations"],
       "source_refs": ["core_vocabulary"],
-      "reason": "The scaffold implements configuration presence, connectivity state, refresh dispatch, and its configuration event.",
+      "reason": "Configuration and the refresh route are available. A real BLE observation, not configuration alone, sets connected=true; Core container deployment still requires a reviewed BlueZ access path.",
       "state": ["connected"],
       "events": ["runtime.config.applied"],
       "conditions": ["state_matches"],
       "actions": ["refresh"]
     },
     {
+      "id": "bthome-v2-core-measurements",
+      "status": "implemented",
+      "scope": ["unencrypted-bthome-v2-advertisements-with-supported-object-ids"],
+      "source_refs": ["bthome", "ble_monitor"],
+      "reason": "The runtime validates and decodes BTHome v2 battery, temperature, and humidity object IDs, captures bounded RSSI from Bleak, filters observations to the configured address, and publishes normalized telemetry.",
+      "state": ["temperature_c", "humidity_percent", "battery_percent", "rssi_dbm"],
+      "events": [],
+      "conditions": [],
+      "actions": []
+    },
+    {
       "id": "environmental-measurements",
       "status": "planned",
       "scope": ["decoded-advertisements-with-matching-measurements"],
       "source_refs": ["ble_monitor", "supported_devices", "bthome"],
-      "reason": "Measurement availability and units must be derived from the decoder and advertised per entity.",
-      "state": ["temperature_c", "humidity_percent", "dew_point_c", "pressure_hpa", "illuminance_lux", "moisture_percent", "conductivity_us_cm", "co2_ppm", "carbon_monoxide_ppm", "voc_ppb", "pm25_ugm3", "pm10_ugm3", "formaldehyde_mgm3", "air_quality_index", "sound_level_db", "voltage_v", "power_w", "energy_kwh"],
+      "reason": "These additional environmental object IDs still need decoder support, normalization, fixtures, and widget treatment before they can be advertised.",
+      "state": ["dew_point_c", "pressure_hpa", "illuminance_lux", "moisture_percent", "conductivity_us_cm", "co2_ppm", "carbon_monoxide_ppm", "voc_ppb", "pm25_ugm3", "pm10_ugm3", "formaldehyde_mgm3", "air_quality_index", "sound_level_db", "voltage_v", "power_w", "energy_kwh"],
       "events": ["environment.measurement_changed", "environment.threshold_crossed"],
       "conditions": ["temperature_threshold", "humidity_threshold", "pressure_threshold", "illuminance_threshold", "moisture_threshold", "air_quality_threshold", "power_threshold", "energy_threshold"],
       "actions": []
@@ -38,8 +49,8 @@
       "status": "planned",
       "scope": ["all-decoded-devices"],
       "source_refs": ["ble_monitor", "ble_gateway"],
-      "reason": "Radio observations come from the shared gateway and freshness must account for device advertising cadence.",
-      "state": ["battery_percent", "battery_voltage_v", "battery_low", "battery_charging", "rssi_dbm", "tx_power_dbm", "packet_count", "last_seen_at", "advertisement_stale", "decoder_errors", "encrypted_payload", "gateway_id"],
+      "reason": "The remaining battery, radio, and diagnostic fields need decoder support or an approved managed gateway contract; trigger-based freshness remains internal runtime behavior rather than a public capability.",
+      "state": ["battery_voltage_v", "battery_low", "battery_charging", "tx_power_dbm", "packet_count", "last_seen_at", "advertisement_stale", "decoder_errors", "encrypted_payload", "gateway_id"],
       "events": ["battery.low", "battery.charging_changed", "device.seen", "device.stale", "device.online", "device.offline", "decoder.error"],
       "conditions": ["battery_below", "signal_below", "last_seen_age_threshold", "advertisement_is_stale", "decoder_is_healthy"],
       "actions": []

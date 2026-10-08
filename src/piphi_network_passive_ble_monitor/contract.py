@@ -19,25 +19,24 @@ ENDPOINTS = {
 REQUIRED_ENDPOINTS = ["health", "entities", "command", "config", "ui_config"]
 
 CAPABILITIES: dict[str, dict[str, Any]] = {
-    "connected": {
-        "kind": "sensor",
-        "unit": "bool"
-    },
-    "refresh": {
-        "kind": "action"
-    }
+    "connected": {"kind": "sensor", "unit": "bool"},
+    "temperature_c": {"kind": "sensor", "unit": "°C"},
+    "humidity_percent": {"kind": "sensor", "unit": "%"},
+    "battery_percent": {"kind": "sensor", "unit": "%"},
+    "rssi_dbm": {"kind": "sensor", "unit": "dBm"},
+    "refresh": {"kind": "action"},
 }
 
 COMMANDS: dict[str, dict[str, Any]] = {
     "refresh": {
-        "description": "Refresh the device state.",
-        "timeout_ms": 5000
+        "description": "Run a bounded Bluetooth scan for this sensor.",
+        "timeout_ms": 10000
     }
 }
 
 CONFIG_SCHEMA: dict[str, Any] = {
     "schema": {
-        "title": "Piphi Network Passive Ble Monitor Setup",
+        "title": "BTHome Sensor Setup",
         "type": "object",
         "required": [
             "host"
@@ -45,7 +44,8 @@ CONFIG_SCHEMA: dict[str, Any] = {
         "properties": {
             "host": {
                 "type": "string",
-                "title": "Host"
+                "title": "BLE address",
+                "description": "MAC address of an unencrypted BTHome v2 sensor, as seen by this host"
             },
             "alias": {
                 "type": "string",
@@ -53,31 +53,37 @@ CONFIG_SCHEMA: dict[str, Any] = {
             },
             "poll_interval_seconds": {
                 "type": "integer",
-                "title": "Poll Interval Seconds",
-                "minimum": 5
+                "title": "Scan interval (seconds)",
+                "minimum": 30,
+                "maximum": 3600,
+                "default": 60
             }
         }
     },
     "uiSchema": {
         "host": {
-            "placeholder": "192.168.1.50"
+            "placeholder": "AA:BB:CC:DD:EE:FF"
         },
         "alias": {
-            "placeholder": "Office Device"
+            "placeholder": "Living room sensor"
         },
         "poll_interval_seconds": {
-            "placeholder": "30"
+            "placeholder": "60"
         }
     }
 }
 
 FALLBACK_ENTITY: dict[str, Any] = {
-    "id": "demo-device",
-    "name": "Demo Device",
-    "device_id": "demo-device",
+    "id": "configured-bthome-sensor",
+    "name": "BTHome sensor",
+    "device_id": "configured-bthome-sensor",
     "entity_type": "sensor",
     "capabilities": [
         "connected",
+        "temperature_c",
+        "humidity_percent",
+        "battery_percent",
+        "rssi_dbm",
         "refresh"
     ],
     "available_commands": [

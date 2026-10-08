@@ -21,5 +21,5 @@ the `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` repository secrets.
 Current image target:
 
 ```text
-docker.io/piphinetwork/piphi-network-passive-ble-monitor:0.1.0
+docker.io/piphinetwork/piphi-network-passive-ble-monitor:0.2.0
 ```
